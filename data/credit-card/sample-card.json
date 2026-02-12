@@ -1,0 +1,36 @@
+{
+  "card_name": "Venture Rewards Card",
+  "issuer_name": "Capital One",
+  "network": "Visa",
+  "url": "https://www.capitalone.com/credit-cards/venture/",
+  "pricing_details": {
+    "purchase_apr": 17.99,
+    "variable_apr_index": "Prime Rate",
+    "variable_apr_margin": 14.74,
+    "penalty_apr": 29.99,
+    "penalty_apr_trigger": "One late payment",
+    "cash_advance_apr": 24.99,
+    "balance_transfer_apr": 17.99,
+    "grace_period_days": 25
+  },
+  "fees": {
+    "annual_fee": 95,
+    "late_fee": 40,
+    "cash_advance_fee": "5% of the amount of each advance, but not less than $10",
+    "balance_transfer_fee": "3% of the amount of each transfer, but not less than $5",
+    "foreign_transaction_fee": 0,
+    "returned_payment_fee": 40
+  },
+  "rewards_program": {
+    "program_name": "Capital One Rewards",
+    "rewards_type": "Miles",
+    "earn_rate": "2 miles per dollar on every purchase",
+    "expiration_policy": "Miles do not expire for the life of the account."
+  },
+  "extraction_tactics": {
+    "minimum_payment_calculation": "Greater of 1% of the New Balance plus interest, or $25",
+    "autopay_default": "Minimum Payment",
+    "unsolicited_credit_limit_increases": true,
+    "affiliate_marketing_network": "CreditCards.com"
+  }
+}
