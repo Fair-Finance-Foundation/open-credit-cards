@@ -1,4 +1,4 @@
-![Fair Finance Foundation Banner](banner.jpeg)
+![Fair Finance Foundation Banner](banner.png)
 
 # Fair Finance Foundation
 
