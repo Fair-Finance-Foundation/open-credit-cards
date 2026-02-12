@@ -49,3 +49,18 @@ permissions:
 ```
 
 The `gh` CLI is already authenticated in GitHub Actions via `GITHUB_TOKEN`.
+
+---
+
+# Project Context
+
+This project uses the `/docs` directory to store all relevant documentation and data for the "Fair Finance Foundation" credit card dataset. To ensure the agent has full context, all markdown files within the `/docs` directory should be loaded.
+
+This is typically configured in the `.pi/config.yaml` file like so:
+
+```yaml
+context:
+  files:
+    - "docs/**/*.md"
+```
+

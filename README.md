@@ -1,57 +1,23 @@
-![gitclaw banner](banner.jpeg)
+![Fair Finance Foundation Banner](banner.jpeg)
 
-A personal AI assistant that runs entirely through GitHub Issues and Actions. Like [OpenClaw](https://github.com/openclaw/openclaw), but no servers or extra infrastructure.
+# Fair Finance Foundation
 
-Powered by the [pi coding agent](https://github.com/badlogic/pi-mono). Every issue becomes a chat thread with an AI agent. Conversation history is committed to git, giving the agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
+### A Comprehensive, Public Credit Card Dataset
 
-Since the agent can read and write files, you can build an evolving software project that updates itself as you open issues. Try asking it to set up a GitHub Pages site, then iterate on it issue by issue.
+This repository is dedicated to building and maintaining a comprehensive, open-source dataset of credit card information. Our mission is to provide transparent and accessible data for consumers, researchers, and developers to promote a fairer and more understandable financial ecosystem.
 
-## How it works
+The dataset includes information on interest rates, fees, rewards programs, and the fine print from credit card agreements. All data is collected from publicly available sources.
 
-1. **Create an issue** → the agent processes your request and replies as a comment.
-2. **Comment on the issue** → the agent resumes the same session with full prior context.
-3. **Everything is committed** → sessions and changes are pushed to the repo after every turn.
+### View the Data
 
-The agent reacts with 👀 while working and removes it when done.
+All of our data and documentation is available on our GitHub Pages site:
 
-### Repo as storage
+**[Explore the Fair Finance Dataset](https://<OWNER>.github.io/<REPO>/)**
 
-All state lives in the repo:
+### Contributing
 
-```
-state/
-  issues/
-    1.json          # maps issue #1 -> its session file
-  sessions/
-    2026-02-04T..._abc123.jsonl    # full conversation for issue #1
-```
+We welcome contributions to the dataset. Please see our (forthcoming) `CONTRIBUTING.md` for guidelines on how to add or update information.
 
-Since sessions are in git, the agent can grep its own history and edit or summarize past conversations.
+### License
 
-## Setup
-
-1. **Fork this repo**
-2. **Add your Anthropic API key** - go to **Settings → Secrets and variables → Actions** and create a secret named `ANTHROPIC_API_KEY`.
-3. **Open an issue** - the agent starts automatically.
-4. **Comment on the issue** - the agent resumes where it left off.
-
-## Security
-
-The workflow only responds to repository **owners, members, and collaborators**. Random users cannot trigger the agent on public repos.
-
-If you plan to use gitclaw for anything private, **make the repo private**. Public repos mean your conversation history is visible to everyone, but get generous GitHub Actions usage.
-
-## Configuration
-
-Edit `.github/workflows/agent.yml` to customize:
-
-- **Model:** Add `--provider` and `--model` flags to the `bunx pi` command.
-- **Tools:** Restrict with `--tools read,grep,find,ls` for read-only analysis.
-- **Thinking:** Add `--thinking high` for harder tasks.
-- **Trigger:** Adjust the `on:` block to filter by labels, assignees, etc.
-
-## Acknowledgments
-
-Built on top of [pi-mono](https://github.com/badlogic/pi-mono) by [Mario Zechner](https://github.com/badlogic).
-
-Thanks to [ymichael](https://github.com/ymichael) for nerdsniping me with the idea of an agent that runs in GitHub Actions.
+The data in this repository is made available under the [Creative Commons BY-SA 4.0 license](LICENSE).
