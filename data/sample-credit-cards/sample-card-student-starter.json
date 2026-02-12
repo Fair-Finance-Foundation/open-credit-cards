@@ -1,0 +1,252 @@
+{
+  "schema_version": "1.0.0",
+
+  "data_metadata": {
+    "collected_date": "2026-02-12",
+    "source_urls": [],
+    "notes": "Sample student credit card. Represents a composite of student-targeted products as of early 2026. Not based on any single real product. Illustrates extraction via unsolicited credit limit increases on young consumers, autopay defaulting to minimum, convenience check mailings, and low initial limits that encourage habitual utilization."
+  },
+
+  "card_identity": {
+    "issuer_name": "Sample University Credit Union",
+    "issuer_id": "SAMPLE-005",
+    "card_name": "Sample Campus Rewards Card",
+    "card_id": "sample-campus-rewards-2026",
+    "network": "Discover",
+    "card_type": "consumer_student",
+    "credit_score_required": {
+      "score_model": "FICO 8",
+      "min_score": null,
+      "tier": "no_credit"
+    },
+    "initial_credit_limit_range": {
+      "min_usd": 500,
+      "max_usd": 2500
+    }
+  },
+
+  "interest_rates": {
+    "purchase_apr": {
+      "min_percent": 18.99,
+      "max_percent": 27.99,
+      "variable": true
+    },
+    "introductory_purchase_apr": {
+      "rate_percent": 0,
+      "duration_months": 6,
+      "reverts_to": "standard_purchase_apr",
+      "early_termination_triggers": ["late_payment", "returned_payment"]
+    },
+    "balance_transfer_apr": {
+      "min_percent": 18.99,
+      "max_percent": 27.99,
+      "variable": true
+    },
+    "introductory_balance_transfer_apr": null,
+    "cash_advance_apr": {
+      "min_percent": 26.99,
+      "max_percent": 28.99,
+      "variable": true
+    },
+    "penalty_apr": {
+      "rate_percent": 29.99,
+      "variable": true,
+      "trigger_conditions": [
+        "two_late_payments_in_12_months",
+        "returned_payment"
+      ],
+      "applies_to_existing_balances": true,
+      "restoration_policy": {
+        "consecutive_on_time_payments_required": 6,
+        "automatic_review": true,
+        "max_duration_months": null
+      }
+    },
+    "margin_over_prime": 15.74,
+    "rate_type": "variable",
+    "compounding_method": "daily",
+    "balance_computation_method": "average_daily_balance_including_new",
+    "minimum_interest_charge_usd": 2.00
+  },
+
+  "fees": {
+    "annual_fee": {
+      "amount_usd": 0,
+      "introductory_amount_usd": null,
+      "introductory_period_months": null
+    },
+    "late_payment_fee": {
+      "first_occurrence_usd": 0,
+      "subsequent_usd": 30,
+      "max_usd": 30
+    },
+    "returned_payment_fee_usd": 30,
+    "over_limit_fee": {
+      "offered": false,
+      "amount_usd": null,
+      "opt_in_required": true
+    },
+    "balance_transfer_fee": {
+      "percent": 3,
+      "min_usd": 5,
+      "introductory_percent": null,
+      "introductory_period_months": null
+    },
+    "cash_advance_fee": {
+      "percent": 5,
+      "min_usd": 10
+    },
+    "foreign_transaction_fee_percent": 0
+  },
+
+  "grace_period": {
+    "purchase_days": 25,
+    "cash_advance_days": null,
+    "balance_transfer_days": null,
+    "conditions": "The grace period applies only when the previous statement balance is paid in full by the due date.",
+    "loss_triggers": [
+      "carrying_a_balance"
+    ]
+  },
+
+  "payment_structure": {
+    "minimum_payment": {
+      "formula_type": "greater_of_flat_or_percent",
+      "formula_description": "The greater of $20 or 2% of the new balance.",
+      "percent_of_balance": 2.0,
+      "floor_usd": 20,
+      "includes_fees_and_interest": false
+    },
+    "payment_allocation": {
+      "above_minimum_allocation": "highest_apr_first",
+      "minimum_allocation": "lowest_apr_first"
+    },
+    "due_date": {
+      "same_day_each_month": true,
+      "weekend_holiday_handling": "next_business_day",
+      "cutoff_time": "11:59 PM ET"
+    },
+    "autopay_options": {
+      "available": true,
+      "default_amount": "minimum_due",
+      "payment_amount_options": [
+        "minimum_due",
+        "statement_balance",
+        "full_balance",
+        "custom_amount"
+      ]
+    }
+  },
+
+  "rewards": {
+    "program_type": "cashback",
+    "base_earn_rate": {
+      "rate": 1.0,
+      "currency": "percent_cashback"
+    },
+    "bonus_categories": [
+      {
+        "category": "rotating_quarterly",
+        "rate": 5.0,
+        "currency": "percent_cashback",
+        "is_rotating": true,
+        "requires_activation": true,
+        "quarterly_cap_usd": 1500,
+        "annual_cap_usd": null
+      }
+    ],
+    "sign_up_bonus": {
+      "amount": 50,
+      "currency": "usd_cashback",
+      "spend_requirement_usd": 500,
+      "time_period_months": 3
+    },
+    "expiration_policy": {
+      "rewards_expire": false,
+      "expiration_period_months": null,
+      "expiration_trigger": "account_closure"
+    },
+    "redemption": {
+      "options": [
+        "statement_credit",
+        "direct_deposit",
+        "pay_with_points",
+        "gift_cards"
+      ],
+      "minimum_redemption_threshold": null,
+      "cents_per_point_range": {
+        "min_cpp": 0.5,
+        "max_cpp": 1.0
+      }
+    },
+    "devaluation_history": []
+  },
+
+  "promotional_offers": {
+    "intro_purchase_apr_offer": {
+      "rate_percent": 0,
+      "duration_months": 6,
+      "reverts_to": "standard_purchase_apr",
+      "early_termination_triggers": ["late_payment", "returned_payment"]
+    },
+    "intro_balance_transfer_apr_offer": null,
+    "deferred_interest": {
+      "offered": false,
+      "period_months": null,
+      "retroactive_interest": false
+    }
+  },
+
+  "default_and_consent_design": {
+    "cash_advance_access_default": "enabled",
+    "over_limit_default": "not_available",
+    "balance_protection_insurance": {
+      "offered": false,
+      "default_enrollment": "not_offered",
+      "monthly_cost_per_100_usd_balance": null
+    },
+    "convenience_checks_mailed_by_default": true,
+    "unsolicited_credit_limit_increases": {
+      "enabled_by_default": true,
+      "opt_out_available": true,
+      "notification_required": false
+    }
+  },
+
+  "disclosure_and_transparency": {
+    "agreement_url": null,
+    "agreement_page_count": 16,
+    "agreement_word_count": 8400,
+    "flesch_kincaid_grade_level": 12.8,
+    "schumer_box_url": null,
+    "cfpb_agreement_id": null
+  },
+
+  "ecosystem": {
+    "interchange_category": "standard",
+    "data_sharing_policy": {
+      "shares_with_affiliates": true,
+      "shares_with_third_parties": false,
+      "opt_out_available": true,
+      "targeted_marketing_from_transaction_data": true
+    },
+    "bnpl_integration": {
+      "offered": false,
+      "product_name": null,
+      "fee_type": null
+    },
+    "product_switching": {
+      "product_change_available": true,
+      "downgrade_to_no_annual_fee_available": true,
+      "rewards_forfeited_on_product_change": false
+    }
+  },
+
+  "military_and_regulatory": {
+    "scra_mla_benefits": {
+      "apr_cap_percent": 6,
+      "fee_waivers": ["late_payment_fee"]
+    },
+    "hardship_program_available": true
+  }
+}

@@ -1,0 +1,230 @@
+{
+  "schema_version": "1.0.0",
+
+  "data_metadata": {
+    "collected_date": "2026-02-12",
+    "source_urls": [],
+    "notes": "Sample secured / credit-builder card. Represents a composite of secured cards targeting consumers with poor or no credit as of early 2026. Not based on any single real product. Illustrates extraction via high APRs on a deposit-backed product, aggressive fee structures on a financially vulnerable population, balance protection insurance upsells, and minimal rewards."
+  },
+
+  "card_identity": {
+    "issuer_name": "Sample Community Bank",
+    "issuer_id": "SAMPLE-003",
+    "card_name": "Sample Secured Builder Card",
+    "card_id": "sample-secured-builder-2026",
+    "network": "Mastercard",
+    "card_type": "consumer_secured",
+    "credit_score_required": {
+      "score_model": "FICO 8",
+      "min_score": null,
+      "tier": "secured"
+    },
+    "initial_credit_limit_range": {
+      "min_usd": 200,
+      "max_usd": 2500
+    }
+  },
+
+  "interest_rates": {
+    "purchase_apr": {
+      "min_percent": 25.99,
+      "max_percent": 25.99,
+      "variable": true
+    },
+    "introductory_purchase_apr": null,
+    "balance_transfer_apr": {
+      "min_percent": 25.99,
+      "max_percent": 25.99,
+      "variable": true
+    },
+    "introductory_balance_transfer_apr": null,
+    "cash_advance_apr": {
+      "min_percent": 27.99,
+      "max_percent": 27.99,
+      "variable": true
+    },
+    "penalty_apr": {
+      "rate_percent": 29.99,
+      "variable": true,
+      "trigger_conditions": [
+        "one_late_payment",
+        "returned_payment",
+        "over_limit"
+      ],
+      "applies_to_existing_balances": true,
+      "restoration_policy": {
+        "consecutive_on_time_payments_required": null,
+        "automatic_review": false,
+        "max_duration_months": null
+      }
+    },
+    "margin_over_prime": 22.74,
+    "rate_type": "variable",
+    "compounding_method": "daily",
+    "balance_computation_method": "average_daily_balance_including_new",
+    "minimum_interest_charge_usd": 1.50
+  },
+
+  "fees": {
+    "annual_fee": {
+      "amount_usd": 49,
+      "introductory_amount_usd": null,
+      "introductory_period_months": null
+    },
+    "late_payment_fee": {
+      "first_occurrence_usd": 30,
+      "subsequent_usd": 41,
+      "max_usd": 41
+    },
+    "returned_payment_fee_usd": 40,
+    "over_limit_fee": {
+      "offered": true,
+      "amount_usd": 35,
+      "opt_in_required": true
+    },
+    "balance_transfer_fee": {
+      "percent": 5,
+      "min_usd": 5,
+      "introductory_percent": null,
+      "introductory_period_months": null
+    },
+    "cash_advance_fee": {
+      "percent": 5,
+      "min_usd": 10
+    },
+    "foreign_transaction_fee_percent": 3
+  },
+
+  "grace_period": {
+    "purchase_days": 25,
+    "cash_advance_days": null,
+    "balance_transfer_days": null,
+    "conditions": "The grace period applies only when the previous statement balance is paid in full by the due date.",
+    "loss_triggers": [
+      "carrying_a_balance"
+    ]
+  },
+
+  "payment_structure": {
+    "minimum_payment": {
+      "formula_type": "greater_of_flat_or_percent",
+      "formula_description": "The greater of $25 or 2% of the balance plus any interest charges, late fees, and over-limit fees.",
+      "percent_of_balance": 2.0,
+      "floor_usd": 25,
+      "includes_fees_and_interest": true
+    },
+    "payment_allocation": {
+      "above_minimum_allocation": "highest_apr_first",
+      "minimum_allocation": "lowest_apr_first"
+    },
+    "due_date": {
+      "same_day_each_month": true,
+      "weekend_holiday_handling": "next_business_day",
+      "cutoff_time": "5:00 PM ET"
+    },
+    "autopay_options": {
+      "available": true,
+      "default_amount": "minimum_due",
+      "payment_amount_options": [
+        "minimum_due",
+        "statement_balance",
+        "full_balance",
+        "fixed_amount"
+      ]
+    }
+  },
+
+  "rewards": {
+    "program_type": "cashback",
+    "base_earn_rate": {
+      "rate": 1.0,
+      "currency": "percent_cashback"
+    },
+    "bonus_categories": [],
+    "sign_up_bonus": {
+      "amount": null,
+      "currency": "usd_cashback",
+      "spend_requirement_usd": null,
+      "time_period_months": null
+    },
+    "expiration_policy": {
+      "rewards_expire": true,
+      "expiration_period_months": 24,
+      "expiration_trigger": "inactivity"
+    },
+    "redemption": {
+      "options": [
+        "statement_credit"
+      ],
+      "minimum_redemption_threshold": 25,
+      "cents_per_point_range": {
+        "min_cpp": 1.0,
+        "max_cpp": 1.0
+      }
+    },
+    "devaluation_history": []
+  },
+
+  "promotional_offers": {
+    "intro_purchase_apr_offer": null,
+    "intro_balance_transfer_apr_offer": null,
+    "deferred_interest": {
+      "offered": false,
+      "period_months": null,
+      "retroactive_interest": false
+    }
+  },
+
+  "default_and_consent_design": {
+    "cash_advance_access_default": "enabled",
+    "over_limit_default": "opt_in",
+    "balance_protection_insurance": {
+      "offered": true,
+      "default_enrollment": "opt_out",
+      "monthly_cost_per_100_usd_balance": 1.19
+    },
+    "convenience_checks_mailed_by_default": true,
+    "unsolicited_credit_limit_increases": {
+      "enabled_by_default": true,
+      "opt_out_available": false,
+      "notification_required": false
+    }
+  },
+
+  "disclosure_and_transparency": {
+    "agreement_url": null,
+    "agreement_page_count": 18,
+    "agreement_word_count": 9800,
+    "flesch_kincaid_grade_level": 13.5,
+    "schumer_box_url": null,
+    "cfpb_agreement_id": null
+  },
+
+  "ecosystem": {
+    "interchange_category": "regulated",
+    "data_sharing_policy": {
+      "shares_with_affiliates": true,
+      "shares_with_third_parties": true,
+      "opt_out_available": false,
+      "targeted_marketing_from_transaction_data": true
+    },
+    "bnpl_integration": {
+      "offered": false,
+      "product_name": null,
+      "fee_type": null
+    },
+    "product_switching": {
+      "product_change_available": true,
+      "downgrade_to_no_annual_fee_available": false,
+      "rewards_forfeited_on_product_change": true
+    }
+  },
+
+  "military_and_regulatory": {
+    "scra_mla_benefits": {
+      "apr_cap_percent": 6,
+      "fee_waivers": ["annual_fee"]
+    },
+    "hardship_program_available": false
+  }
+}

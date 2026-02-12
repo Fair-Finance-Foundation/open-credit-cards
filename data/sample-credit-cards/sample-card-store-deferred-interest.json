@@ -1,0 +1,228 @@
+{
+  "schema_version": "1.0.0",
+
+  "data_metadata": {
+    "collected_date": "2026-02-12",
+    "source_urls": [],
+    "notes": "Sample retail store card with deferred-interest financing. Represents a composite of store-branded credit cards as of early 2026. Not based on any single real product. Illustrates extraction via retroactive deferred interest, high standard APR, aggressive penalty APR with no guaranteed restoration, unsolicited limit increases without notification, and poor disclosure readability."
+  },
+
+  "card_identity": {
+    "issuer_name": "Sample Retail Financial Services",
+    "issuer_id": "SAMPLE-004",
+    "card_name": "Sample HomeGoods Store Card",
+    "card_id": "sample-homegoods-store-2026",
+    "network": "Other",
+    "card_type": "consumer_store",
+    "credit_score_required": {
+      "score_model": "FICO 8",
+      "min_score": 580,
+      "tier": "fair"
+    },
+    "initial_credit_limit_range": {
+      "min_usd": 300,
+      "max_usd": 5000
+    }
+  },
+
+  "interest_rates": {
+    "purchase_apr": {
+      "min_percent": 29.99,
+      "max_percent": 29.99,
+      "variable": false
+    },
+    "introductory_purchase_apr": null,
+    "balance_transfer_apr": {
+      "min_percent": 29.99,
+      "max_percent": 29.99,
+      "variable": false
+    },
+    "introductory_balance_transfer_apr": null,
+    "cash_advance_apr": {
+      "min_percent": 29.99,
+      "max_percent": 29.99,
+      "variable": false
+    },
+    "penalty_apr": {
+      "rate_percent": 31.99,
+      "variable": false,
+      "trigger_conditions": [
+        "one_late_payment",
+        "returned_payment",
+        "over_limit"
+      ],
+      "applies_to_existing_balances": true,
+      "restoration_policy": {
+        "consecutive_on_time_payments_required": null,
+        "automatic_review": false,
+        "max_duration_months": null
+      }
+    },
+    "margin_over_prime": null,
+    "rate_type": "fixed",
+    "compounding_method": "daily",
+    "balance_computation_method": "average_daily_balance_including_new",
+    "minimum_interest_charge_usd": 2.00
+  },
+
+  "fees": {
+    "annual_fee": {
+      "amount_usd": 0,
+      "introductory_amount_usd": null,
+      "introductory_period_months": null
+    },
+    "late_payment_fee": {
+      "first_occurrence_usd": 30,
+      "subsequent_usd": 41,
+      "max_usd": 41
+    },
+    "returned_payment_fee_usd": 35,
+    "over_limit_fee": {
+      "offered": true,
+      "amount_usd": 35,
+      "opt_in_required": true
+    },
+    "balance_transfer_fee": {
+      "percent": 5,
+      "min_usd": 5,
+      "introductory_percent": null,
+      "introductory_period_months": null
+    },
+    "cash_advance_fee": {
+      "percent": 5,
+      "min_usd": 10
+    },
+    "foreign_transaction_fee_percent": null
+  },
+
+  "grace_period": {
+    "purchase_days": 23,
+    "cash_advance_days": null,
+    "balance_transfer_days": null,
+    "conditions": "The grace period applies only when the previous statement balance is paid in full by the due date. Deferred-interest promotional balances do not receive a grace period once the promotional period expires.",
+    "loss_triggers": [
+      "carrying_a_balance",
+      "deferred_interest_promo_expiration"
+    ]
+  },
+
+  "payment_structure": {
+    "minimum_payment": {
+      "formula_type": "greater_of_flat_or_percent",
+      "formula_description": "The greater of $27 or 1% of the balance plus any interest charges, late fees, and over-limit fees. During deferred-interest promotional periods, the minimum may be as low as $27 regardless of balance size.",
+      "percent_of_balance": 1.0,
+      "floor_usd": 27,
+      "includes_fees_and_interest": true
+    },
+    "payment_allocation": {
+      "above_minimum_allocation": "highest_apr_first",
+      "minimum_allocation": "lowest_apr_first"
+    },
+    "due_date": {
+      "same_day_each_month": true,
+      "weekend_holiday_handling": "same_day",
+      "cutoff_time": "5:00 PM CT"
+    },
+    "autopay_options": {
+      "available": true,
+      "default_amount": "minimum_due",
+      "payment_amount_options": [
+        "minimum_due",
+        "statement_balance",
+        "full_balance"
+      ]
+    }
+  },
+
+  "rewards": {
+    "program_type": "none",
+    "base_earn_rate": {
+      "rate": 0,
+      "currency": "percent_cashback"
+    },
+    "bonus_categories": [],
+    "sign_up_bonus": {
+      "amount": null,
+      "currency": "usd_cashback",
+      "spend_requirement_usd": null,
+      "time_period_months": null
+    },
+    "expiration_policy": {
+      "rewards_expire": false,
+      "expiration_period_months": null,
+      "expiration_trigger": null
+    },
+    "redemption": {
+      "options": [],
+      "minimum_redemption_threshold": null,
+      "cents_per_point_range": {
+        "min_cpp": 0,
+        "max_cpp": 0
+      }
+    },
+    "devaluation_history": []
+  },
+
+  "promotional_offers": {
+    "intro_purchase_apr_offer": null,
+    "intro_balance_transfer_apr_offer": null,
+    "deferred_interest": {
+      "offered": true,
+      "period_months": 12,
+      "retroactive_interest": true
+    }
+  },
+
+  "default_and_consent_design": {
+    "cash_advance_access_default": "enabled",
+    "over_limit_default": "opt_in",
+    "balance_protection_insurance": {
+      "offered": true,
+      "default_enrollment": "opt_out",
+      "monthly_cost_per_100_usd_balance": 1.49
+    },
+    "convenience_checks_mailed_by_default": true,
+    "unsolicited_credit_limit_increases": {
+      "enabled_by_default": true,
+      "opt_out_available": false,
+      "notification_required": false
+    }
+  },
+
+  "disclosure_and_transparency": {
+    "agreement_url": null,
+    "agreement_page_count": 20,
+    "agreement_word_count": 11500,
+    "flesch_kincaid_grade_level": 16.3,
+    "schumer_box_url": null,
+    "cfpb_agreement_id": null
+  },
+
+  "ecosystem": {
+    "interchange_category": null,
+    "data_sharing_policy": {
+      "shares_with_affiliates": true,
+      "shares_with_third_parties": true,
+      "opt_out_available": false,
+      "targeted_marketing_from_transaction_data": true
+    },
+    "bnpl_integration": {
+      "offered": false,
+      "product_name": null,
+      "fee_type": null
+    },
+    "product_switching": {
+      "product_change_available": false,
+      "downgrade_to_no_annual_fee_available": false,
+      "rewards_forfeited_on_product_change": false
+    }
+  },
+
+  "military_and_regulatory": {
+    "scra_mla_benefits": {
+      "apr_cap_percent": 6,
+      "fee_waivers": ["late_payment_fee"]
+    },
+    "hardship_program_available": false
+  }
+}

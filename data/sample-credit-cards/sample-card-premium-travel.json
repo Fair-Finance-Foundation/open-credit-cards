@@ -1,0 +1,272 @@
+{
+  "schema_version": "1.0.0",
+
+  "data_metadata": {
+    "collected_date": "2026-02-12",
+    "source_urls": [],
+    "notes": "Sample premium travel card. Represents a composite of high-end travel rewards products as of early 2026. Not based on any single real product. Illustrates extraction via high annual fees, rewards complexity and devaluation risk, super-premium interchange externalization, and product-switching lock-in."
+  },
+
+  "card_identity": {
+    "issuer_name": "Sample National Bank",
+    "issuer_id": "SAMPLE-001",
+    "card_name": "Sample Elite Travel Rewards Card",
+    "card_id": "sample-elite-travel-2026",
+    "network": "Visa",
+    "card_type": "consumer_rewards",
+    "credit_score_required": {
+      "score_model": "FICO 8",
+      "min_score": 740,
+      "tier": "excellent"
+    },
+    "initial_credit_limit_range": {
+      "min_usd": 10000,
+      "max_usd": null
+    }
+  },
+
+  "interest_rates": {
+    "purchase_apr": {
+      "min_percent": 21.49,
+      "max_percent": 28.49,
+      "variable": true
+    },
+    "introductory_purchase_apr": null,
+    "balance_transfer_apr": {
+      "min_percent": 21.49,
+      "max_percent": 28.49,
+      "variable": true
+    },
+    "introductory_balance_transfer_apr": null,
+    "cash_advance_apr": {
+      "min_percent": 28.49,
+      "max_percent": 28.49,
+      "variable": true
+    },
+    "penalty_apr": {
+      "rate_percent": 29.99,
+      "variable": true,
+      "trigger_conditions": [
+        "one_late_payment",
+        "returned_payment"
+      ],
+      "applies_to_existing_balances": false,
+      "restoration_policy": {
+        "consecutive_on_time_payments_required": 6,
+        "automatic_review": true,
+        "max_duration_months": null
+      }
+    },
+    "margin_over_prime": 18.24,
+    "rate_type": "variable",
+    "compounding_method": "daily",
+    "balance_computation_method": "average_daily_balance_including_new",
+    "minimum_interest_charge_usd": 2.00
+  },
+
+  "fees": {
+    "annual_fee": {
+      "amount_usd": 550,
+      "introductory_amount_usd": null,
+      "introductory_period_months": null
+    },
+    "late_payment_fee": {
+      "first_occurrence_usd": 30,
+      "subsequent_usd": 41,
+      "max_usd": 41
+    },
+    "returned_payment_fee_usd": 40,
+    "over_limit_fee": {
+      "offered": false,
+      "amount_usd": null,
+      "opt_in_required": true
+    },
+    "balance_transfer_fee": {
+      "percent": 5,
+      "min_usd": 5,
+      "introductory_percent": null,
+      "introductory_period_months": null
+    },
+    "cash_advance_fee": {
+      "percent": 5,
+      "min_usd": 10
+    },
+    "foreign_transaction_fee_percent": 0
+  },
+
+  "grace_period": {
+    "purchase_days": 21,
+    "cash_advance_days": null,
+    "balance_transfer_days": null,
+    "conditions": "The grace period applies only when the previous statement balance is paid in full by the due date.",
+    "loss_triggers": [
+      "carrying_a_balance"
+    ]
+  },
+
+  "payment_structure": {
+    "minimum_payment": {
+      "formula_type": "greater_of_flat_or_percent",
+      "formula_description": "The greater of $35 or 1% of the balance plus any interest charges and late fees.",
+      "percent_of_balance": 1.0,
+      "floor_usd": 35,
+      "includes_fees_and_interest": true
+    },
+    "payment_allocation": {
+      "above_minimum_allocation": "highest_apr_first",
+      "minimum_allocation": "lowest_apr_first"
+    },
+    "due_date": {
+      "same_day_each_month": true,
+      "weekend_holiday_handling": "next_business_day",
+      "cutoff_time": "11:59 PM ET"
+    },
+    "autopay_options": {
+      "available": true,
+      "default_amount": "minimum_due",
+      "payment_amount_options": [
+        "minimum_due",
+        "statement_balance",
+        "full_balance",
+        "fixed_amount",
+        "custom_amount"
+      ]
+    }
+  },
+
+  "rewards": {
+    "program_type": "points",
+    "base_earn_rate": {
+      "rate": 1.0,
+      "currency": "points"
+    },
+    "bonus_categories": [
+      {
+        "category": "travel",
+        "rate": 5.0,
+        "currency": "points",
+        "is_rotating": false,
+        "requires_activation": false,
+        "quarterly_cap_usd": null,
+        "annual_cap_usd": null
+      },
+      {
+        "category": "dining",
+        "rate": 3.0,
+        "currency": "points",
+        "is_rotating": false,
+        "requires_activation": false,
+        "quarterly_cap_usd": null,
+        "annual_cap_usd": null
+      },
+      {
+        "category": "streaming",
+        "rate": 2.0,
+        "currency": "points",
+        "is_rotating": false,
+        "requires_activation": false,
+        "quarterly_cap_usd": null,
+        "annual_cap_usd": null
+      }
+    ],
+    "sign_up_bonus": {
+      "amount": 80000,
+      "currency": "points",
+      "spend_requirement_usd": 5000,
+      "time_period_months": 3
+    },
+    "expiration_policy": {
+      "rewards_expire": false,
+      "expiration_period_months": null,
+      "expiration_trigger": "account_closure"
+    },
+    "redemption": {
+      "options": [
+        "travel_portal",
+        "transfer_partners",
+        "statement_credit",
+        "gift_cards",
+        "pay_with_points",
+        "merchandise"
+      ],
+      "minimum_redemption_threshold": null,
+      "cents_per_point_range": {
+        "min_cpp": 0.6,
+        "max_cpp": 2.0
+      }
+    },
+    "devaluation_history": [
+      {
+        "date": "2024-03-01",
+        "description": "Travel portal redemption value reduced from 1.5 cpp to 1.25 cpp."
+      },
+      {
+        "date": "2025-09-01",
+        "description": "Two airline transfer partners removed from the program; one hotel partner devalued by 20%."
+      }
+    ]
+  },
+
+  "promotional_offers": {
+    "intro_purchase_apr_offer": null,
+    "intro_balance_transfer_apr_offer": null,
+    "deferred_interest": {
+      "offered": false,
+      "period_months": null,
+      "retroactive_interest": false
+    }
+  },
+
+  "default_and_consent_design": {
+    "cash_advance_access_default": "enabled",
+    "over_limit_default": "opt_in",
+    "balance_protection_insurance": {
+      "offered": false,
+      "default_enrollment": "not_offered",
+      "monthly_cost_per_100_usd_balance": null
+    },
+    "convenience_checks_mailed_by_default": false,
+    "unsolicited_credit_limit_increases": {
+      "enabled_by_default": true,
+      "opt_out_available": true,
+      "notification_required": true
+    }
+  },
+
+  "disclosure_and_transparency": {
+    "agreement_url": null,
+    "agreement_page_count": 32,
+    "agreement_word_count": 18200,
+    "flesch_kincaid_grade_level": 15.1,
+    "schumer_box_url": null,
+    "cfpb_agreement_id": null
+  },
+
+  "ecosystem": {
+    "interchange_category": "super_premium",
+    "data_sharing_policy": {
+      "shares_with_affiliates": true,
+      "shares_with_third_parties": true,
+      "opt_out_available": true,
+      "targeted_marketing_from_transaction_data": true
+    },
+    "bnpl_integration": {
+      "offered": true,
+      "product_name": "Sample FlexPay",
+      "fee_type": "flat_monthly_fee"
+    },
+    "product_switching": {
+      "product_change_available": true,
+      "downgrade_to_no_annual_fee_available": true,
+      "rewards_forfeited_on_product_change": true
+    }
+  },
+
+  "military_and_regulatory": {
+    "scra_mla_benefits": {
+      "apr_cap_percent": 6,
+      "fee_waivers": ["annual_fee", "late_payment_fee", "foreign_transaction_fee"]
+    },
+    "hardship_program_available": true
+  }
+}
