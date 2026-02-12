@@ -1,0 +1,808 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fairfinancefoundation.org/schemas/credit-card.schema.json",
+  "title": "Credit Card Product",
+  "description": "Comprehensive schema for credit card products. Combines fields from the CFPB Terms of Credit Card Plans Survey with additional publicly-sourceable fields (e.g., from cardholder agreements, issuer websites, and regulatory filings) that inform the identification of revenue-extraction tactics described in the Fair Finance Foundation's credit-card-extraction-tactics analysis.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "card_identity",
+    "interest_rates",
+    "fees",
+    "payment_structure"
+  ],
+  "properties": {
+
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Version of this schema."
+    },
+
+    "data_metadata": {
+      "type": "object",
+      "description": "Provenance and freshness metadata for this record.",
+      "properties": {
+        "collected_date": {
+          "type": "string",
+          "format": "date",
+          "description": "ISO 8601 date the data was collected."
+        },
+        "source_urls": {
+          "type": "array",
+          "items": { "type": "string", "format": "uri" },
+          "description": "URLs of public sources (agreement PDFs, issuer pages, CFPB filings) used to populate this record."
+        },
+        "cfpb_survey_period": {
+          "type": "string",
+          "description": "CFPB Terms of Credit Card Plans survey reporting period, if applicable (e.g., '2025-H1')."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Free-text notes about data quality, caveats, or collection methodology."
+        }
+      }
+    },
+
+    "card_identity": {
+      "type": "object",
+      "description": "Identifies the card product and issuer.",
+      "required": ["issuer_name", "card_name"],
+      "properties": {
+        "issuer_name": {
+          "type": "string",
+          "description": "Legal name of the card issuer (the bank, not the network)."
+        },
+        "issuer_id": {
+          "type": "string",
+          "description": "Stable identifier for the issuer (e.g., RSSD ID or LEI)."
+        },
+        "card_name": {
+          "type": "string",
+          "description": "Marketing name of the card product."
+        },
+        "card_id": {
+          "type": "string",
+          "description": "Stable identifier for this specific card product, if one exists."
+        },
+        "network": {
+          "type": "string",
+          "enum": ["Visa", "Mastercard", "American Express", "Discover", "Other"],
+          "description": "Payment network."
+        },
+        "card_type": {
+          "type": "string",
+          "enum": ["consumer_general", "consumer_rewards", "consumer_secured", "consumer_student", "consumer_store", "small_business", "corporate", "charge_card", "other"],
+          "description": "Product category."
+        },
+        "credit_score_required": {
+          "type": "object",
+          "description": "Credit score range typically required for approval.",
+          "properties": {
+            "score_model": {
+              "type": "string",
+              "description": "Scoring model (e.g., 'FICO 8', 'VantageScore 3.0')."
+            },
+            "min_score": {
+              "type": ["integer", "null"],
+              "description": "Approximate minimum score for approval, or null if unknown."
+            },
+            "tier": {
+              "type": "string",
+              "enum": ["excellent", "good", "fair", "poor", "no_credit", "secured", "unknown"],
+              "description": "General credit tier the card targets."
+            }
+          }
+        },
+        "initial_credit_limit_range": {
+          "type": "object",
+          "description": "Typical starting credit limit range.",
+          "properties": {
+            "min_usd": { "type": "number" },
+            "max_usd": { "type": ["number", "null"] }
+          }
+        }
+      }
+    },
+
+    "interest_rates": {
+      "type": "object",
+      "description": "All APR-related terms. Directly sourced from the CFPB survey and Schumer Box, with additional detail on mechanics that drive extraction (Sections 2 and 4 of the tactics analysis).",
+      "properties": {
+        "purchase_apr": {
+          "$ref": "#/$defs/apr_range",
+          "description": "Standard APR for purchases."
+        },
+        "introductory_purchase_apr": {
+          "$ref": "#/$defs/promotional_apr",
+          "description": "Introductory/promotional APR on purchases."
+        },
+        "balance_transfer_apr": {
+          "$ref": "#/$defs/apr_range",
+          "description": "Standard APR for balance transfers."
+        },
+        "introductory_balance_transfer_apr": {
+          "$ref": "#/$defs/promotional_apr",
+          "description": "Introductory/promotional APR on balance transfers."
+        },
+        "cash_advance_apr": {
+          "$ref": "#/$defs/apr_range",
+          "description": "APR for cash advances. Typically higher than purchase APR and with no grace period."
+        },
+        "penalty_apr": {
+          "type": "object",
+          "description": "Penalty APR imposed after a triggering event. A major extraction mechanism (Section 2).",
+          "properties": {
+            "rate_percent": {
+              "type": ["number", "null"],
+              "description": "Penalty APR as a percentage, or null if no penalty APR exists."
+            },
+            "variable": {
+              "type": "boolean",
+              "description": "Whether the penalty APR varies with the prime rate."
+            },
+            "trigger_conditions": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Events that trigger the penalty APR (e.g., 'one_late_payment', 'two_late_payments_in_12_months', 'returned_payment', 'over_limit')."
+            },
+            "applies_to_existing_balances": {
+              "type": "boolean",
+              "description": "Whether the penalty APR applies to existing balances or only new transactions."
+            },
+            "restoration_policy": {
+              "type": "object",
+              "description": "Conditions under which the penalty APR is removed.",
+              "properties": {
+                "consecutive_on_time_payments_required": {
+                  "type": ["integer", "null"],
+                  "description": "Number of consecutive on-time payments required, or null if never restored."
+                },
+                "automatic_review": {
+                  "type": "boolean",
+                  "description": "Whether the issuer automatically reviews for restoration."
+                },
+                "max_duration_months": {
+                  "type": ["integer", "null"],
+                  "description": "Maximum duration the penalty APR can apply, or null if indefinite."
+                }
+              }
+            }
+          }
+        },
+        "margin_over_prime": {
+          "type": ["number", "null"],
+          "description": "For variable-rate cards: the margin added to the prime rate (e.g., if APR = prime + 14.74%, this is 14.74). Null if fixed."
+        },
+        "rate_type": {
+          "type": "string",
+          "enum": ["variable", "fixed", "tiered_variable"],
+          "description": "Whether the rate is fixed or variable (tied to the prime rate)."
+        },
+        "compounding_method": {
+          "type": "string",
+          "enum": ["daily", "monthly"],
+          "description": "How interest compounds. Almost all US cards use daily compounding on the average daily balance."
+        },
+        "balance_computation_method": {
+          "type": "string",
+          "enum": ["average_daily_balance_including_new", "average_daily_balance_excluding_new", "two_cycle_average_daily_balance", "daily_balance", "other"],
+          "description": "Method used to compute the balance on which interest is charged."
+        },
+        "minimum_interest_charge_usd": {
+          "type": ["number", "null"],
+          "description": "Minimum finance/interest charge per billing cycle when interest is owed."
+        }
+      }
+    },
+
+    "fees": {
+      "type": "object",
+      "description": "All fee-related terms. Core CFPB survey fields plus detail on fee structures that drive extraction (Section 3).",
+      "properties": {
+        "annual_fee": {
+          "type": "object",
+          "properties": {
+            "amount_usd": {
+              "type": "number",
+              "description": "Annual fee in USD."
+            },
+            "introductory_amount_usd": {
+              "type": ["number", "null"],
+              "description": "First-year annual fee if different (e.g., waived = 0)."
+            },
+            "introductory_period_months": {
+              "type": ["integer", "null"],
+              "description": "Duration of introductory annual fee."
+            }
+          }
+        },
+        "late_payment_fee": {
+          "type": "object",
+          "properties": {
+            "first_occurrence_usd": {
+              "type": "number",
+              "description": "Fee for the first late payment."
+            },
+            "subsequent_usd": {
+              "type": "number",
+              "description": "Fee for subsequent late payments within a specified window."
+            },
+            "max_usd": {
+              "type": ["number", "null"],
+              "description": "Maximum late fee (cannot exceed the minimum payment due, per CARD Act)."
+            }
+          }
+        },
+        "returned_payment_fee_usd": {
+          "type": "number",
+          "description": "Fee when a payment is returned (e.g., insufficient funds)."
+        },
+        "over_limit_fee": {
+          "type": "object",
+          "properties": {
+            "offered": {
+              "type": "boolean",
+              "description": "Whether the issuer charges an over-limit fee (requires opt-in post-CARD Act)."
+            },
+            "amount_usd": {
+              "type": ["number", "null"],
+              "description": "Over-limit fee amount if offered."
+            },
+            "opt_in_required": {
+              "type": "boolean",
+              "description": "Whether consumer must opt in to over-limit transactions."
+            }
+          }
+        },
+        "balance_transfer_fee": {
+          "type": "object",
+          "properties": {
+            "percent": {
+              "type": "number",
+              "description": "Balance transfer fee as a percentage of the transfer amount."
+            },
+            "min_usd": {
+              "type": "number",
+              "description": "Minimum balance transfer fee in USD."
+            },
+            "introductory_percent": {
+              "type": ["number", "null"],
+              "description": "Promotional balance transfer fee percentage, if any."
+            },
+            "introductory_period_months": {
+              "type": ["integer", "null"],
+              "description": "Duration of the promotional balance transfer fee."
+            }
+          }
+        },
+        "cash_advance_fee": {
+          "type": "object",
+          "properties": {
+            "percent": {
+              "type": "number",
+              "description": "Cash advance fee as a percentage of the advance amount."
+            },
+            "min_usd": {
+              "type": "number",
+              "description": "Minimum cash advance fee in USD."
+            }
+          }
+        },
+        "foreign_transaction_fee_percent": {
+          "type": ["number", "null"],
+          "description": "Fee as a percentage of foreign transactions. Null or 0 if none."
+        }
+      }
+    },
+
+    "grace_period": {
+      "type": "object",
+      "description": "Grace period terms. A key factor in whether interest accrues on purchases.",
+      "properties": {
+        "purchase_days": {
+          "type": ["integer", "null"],
+          "description": "Minimum grace period in days for purchases (typically 21–25). Null if no grace period."
+        },
+        "cash_advance_days": {
+          "type": ["integer", "null"],
+          "description": "Grace period for cash advances. Typically null (no grace period)."
+        },
+        "balance_transfer_days": {
+          "type": ["integer", "null"],
+          "description": "Grace period for balance transfers. Often null."
+        },
+        "conditions": {
+          "type": "string",
+          "description": "Conditions under which the grace period applies (e.g., 'balance paid in full by due date')."
+        },
+        "loss_triggers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Events that cause loss of the grace period (e.g., 'carrying_a_balance', 'cash_advance_on_account')."
+        }
+      }
+    },
+
+    "payment_structure": {
+      "type": "object",
+      "description": "Minimum payment calculation and payment allocation rules. Central to the extraction mechanics in Section 1 of the tactics analysis.",
+      "required": ["minimum_payment"],
+      "properties": {
+        "minimum_payment": {
+          "type": "object",
+          "description": "How the minimum payment is calculated — a primary driver of debt duration.",
+          "properties": {
+            "formula_type": {
+              "type": "string",
+              "enum": [
+                "flat_percent_of_balance",
+                "interest_plus_percent_of_principal",
+                "greater_of_flat_or_percent",
+                "tiered",
+                "other"
+              ],
+              "description": "Classification of the minimum payment formula."
+            },
+            "formula_description": {
+              "type": "string",
+              "description": "Human-readable description of the minimum payment formula."
+            },
+            "percent_of_balance": {
+              "type": ["number", "null"],
+              "description": "If formula is percentage-based, the percentage (e.g., 1.0 for 1%)."
+            },
+            "floor_usd": {
+              "type": "number",
+              "description": "Minimum dollar amount due when a balance exists (e.g., $25 or $35)."
+            },
+            "includes_fees_and_interest": {
+              "type": "boolean",
+              "description": "Whether accrued interest and fees are added on top of the calculated minimum."
+            }
+          }
+        },
+        "payment_allocation": {
+          "type": "object",
+          "description": "How payments are allocated across balance buckets.",
+          "properties": {
+            "above_minimum_allocation": {
+              "type": "string",
+              "enum": ["highest_apr_first", "pro_rata", "issuer_discretion", "other"],
+              "description": "How payments above the minimum are allocated. CARD Act requires highest-APR-first for amounts above the minimum."
+            },
+            "minimum_allocation": {
+              "type": "string",
+              "enum": ["lowest_apr_first", "pro_rata", "issuer_discretion", "other"],
+              "description": "How the minimum payment amount is allocated. Many issuers direct the minimum to the lowest-rate bucket."
+            }
+          }
+        },
+        "due_date": {
+          "type": "object",
+          "description": "Due date rules, which affect late-fee timing risk.",
+          "properties": {
+            "same_day_each_month": {
+              "type": "boolean",
+              "description": "Whether the due date falls on the same calendar day each month."
+            },
+            "weekend_holiday_handling": {
+              "type": "string",
+              "enum": ["next_business_day", "previous_business_day", "same_day", "unknown"],
+              "description": "How due dates falling on weekends/holidays are handled."
+            },
+            "cutoff_time": {
+              "type": "string",
+              "description": "Daily cutoff time for payments (e.g., '5:00 PM ET', '11:59 PM ET')."
+            }
+          }
+        },
+        "autopay_options": {
+          "type": "object",
+          "description": "Autopay configuration — default settings are a major extraction lever (Section 6).",
+          "properties": {
+            "available": {
+              "type": "boolean",
+              "description": "Whether autopay is available."
+            },
+            "default_amount": {
+              "type": "string",
+              "enum": ["minimum_due", "statement_balance", "full_balance", "custom", "no_default", "not_applicable"],
+              "description": "What amount autopay defaults to when first enrolled."
+            },
+            "payment_amount_options": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["minimum_due", "statement_balance", "full_balance", "fixed_amount", "custom_amount"]
+              },
+              "description": "Available autopay amount choices."
+            }
+          }
+        }
+      }
+    },
+
+    "rewards": {
+      "type": "object",
+      "description": "Rewards program structure and policies. Informs extraction analysis in Sections 4 and 5.",
+      "properties": {
+        "program_type": {
+          "type": ["string", "null"],
+          "enum": ["cashback", "points", "miles", "hybrid", "none", null],
+          "description": "Primary rewards currency type."
+        },
+        "base_earn_rate": {
+          "type": "object",
+          "description": "Default earning rate on non-bonus purchases.",
+          "properties": {
+            "rate": {
+              "type": "number",
+              "description": "Units earned per dollar spent (e.g., 1.5 for 1.5%)."
+            },
+            "currency": {
+              "type": "string",
+              "description": "Rewards currency (e.g., 'percent_cashback', 'points', 'miles')."
+            }
+          }
+        },
+        "bonus_categories": {
+          "type": "array",
+          "description": "Bonus earning categories.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "string",
+                "description": "Spending category (e.g., 'dining', 'travel', 'groceries', 'gas')."
+              },
+              "rate": {
+                "type": "number",
+                "description": "Earning rate in this category."
+              },
+              "currency": {
+                "type": "string"
+              },
+              "is_rotating": {
+                "type": "boolean",
+                "description": "Whether this category rotates quarterly or periodically."
+              },
+              "requires_activation": {
+                "type": "boolean",
+                "description": "Whether the cardholder must manually activate/enroll each period."
+              },
+              "quarterly_cap_usd": {
+                "type": ["number", "null"],
+                "description": "Spending cap per quarter for bonus rate, or null if uncapped."
+              },
+              "annual_cap_usd": {
+                "type": ["number", "null"],
+                "description": "Spending cap per year for bonus rate, or null if uncapped."
+              }
+            }
+          }
+        },
+        "sign_up_bonus": {
+          "type": "object",
+          "description": "New cardholder bonus offer.",
+          "properties": {
+            "amount": {
+              "type": ["number", "null"],
+              "description": "Bonus amount (in rewards currency units or USD cashback)."
+            },
+            "currency": {
+              "type": "string",
+              "description": "Currency of the bonus."
+            },
+            "spend_requirement_usd": {
+              "type": ["number", "null"],
+              "description": "Minimum spend required to earn the bonus."
+            },
+            "time_period_months": {
+              "type": ["integer", "null"],
+              "description": "Months within which the spend requirement must be met."
+            }
+          }
+        },
+        "expiration_policy": {
+          "type": "object",
+          "description": "Whether and how rewards expire — a key breakage mechanism.",
+          "properties": {
+            "rewards_expire": {
+              "type": "boolean",
+              "description": "Whether rewards points/miles expire."
+            },
+            "expiration_period_months": {
+              "type": ["integer", "null"],
+              "description": "Months of inactivity or elapsed time before expiration, if applicable."
+            },
+            "expiration_trigger": {
+              "type": ["string", "null"],
+              "enum": ["inactivity", "fixed_date", "account_closure", "program_change", null],
+              "description": "What causes expiration."
+            }
+          }
+        },
+        "redemption": {
+          "type": "object",
+          "description": "Redemption options and friction points.",
+          "properties": {
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["statement_credit", "direct_deposit", "check", "gift_cards", "travel_portal", "transfer_partners", "merchandise", "pay_with_points"]
+              },
+              "description": "Available redemption channels."
+            },
+            "minimum_redemption_threshold": {
+              "type": ["number", "null"],
+              "description": "Minimum points/cashback required to redeem, or null if no minimum."
+            },
+            "cents_per_point_range": {
+              "type": "object",
+              "description": "Approximate value range of a point/mile across redemption channels.",
+              "properties": {
+                "min_cpp": { "type": "number" },
+                "max_cpp": { "type": "number" }
+              }
+            }
+          }
+        },
+        "devaluation_history": {
+          "type": "array",
+          "description": "Record of known rewards devaluations.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": { "type": "string", "format": "date" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "promotional_offers": {
+      "type": "object",
+      "description": "Current promotional offers beyond intro APR (which is captured under interest_rates).",
+      "properties": {
+        "intro_purchase_apr_offer": {
+          "$ref": "#/$defs/promotional_apr"
+        },
+        "intro_balance_transfer_apr_offer": {
+          "$ref": "#/$defs/promotional_apr"
+        },
+        "deferred_interest": {
+          "type": "object",
+          "description": "Deferred-interest promotions (common on store cards). If the balance isn't paid in full by the end of the promo period, interest is charged retroactively on the full original amount.",
+          "properties": {
+            "offered": {
+              "type": "boolean"
+            },
+            "period_months": {
+              "type": ["integer", "null"]
+            },
+            "retroactive_interest": {
+              "type": "boolean",
+              "description": "Whether unpaid balances at promo end trigger interest from the original purchase date."
+            }
+          }
+        }
+      }
+    },
+
+    "default_and_consent_design": {
+      "type": "object",
+      "description": "Default settings and opt-in/opt-out structures. Informs Section 6 extraction analysis.",
+      "properties": {
+        "cash_advance_access_default": {
+          "type": "string",
+          "enum": ["enabled", "disabled", "requires_activation", "unknown"],
+          "description": "Whether cash advance access (including convenience checks) is enabled by default."
+        },
+        "over_limit_default": {
+          "type": "string",
+          "enum": ["opt_in", "opt_out", "not_available", "unknown"],
+          "description": "Default over-limit transaction handling."
+        },
+        "balance_protection_insurance": {
+          "type": "object",
+          "description": "Credit/balance protection insurance product offered with the card.",
+          "properties": {
+            "offered": { "type": "boolean" },
+            "default_enrollment": {
+              "type": "string",
+              "enum": ["opt_in", "opt_out", "not_offered", "unknown"]
+            },
+            "monthly_cost_per_100_usd_balance": {
+              "type": ["number", "null"],
+              "description": "Monthly cost per $100 of outstanding balance."
+            }
+          }
+        },
+        "convenience_checks_mailed_by_default": {
+          "type": "boolean",
+          "description": "Whether the issuer mails convenience checks without the cardholder requesting them."
+        },
+        "unsolicited_credit_limit_increases": {
+          "type": "object",
+          "description": "Policy on automatic credit limit increases.",
+          "properties": {
+            "enabled_by_default": {
+              "type": "boolean",
+              "description": "Whether the issuer may increase limits without the cardholder requesting it."
+            },
+            "opt_out_available": {
+              "type": "boolean",
+              "description": "Whether the cardholder can opt out of unsolicited increases."
+            },
+            "notification_required": {
+              "type": "boolean",
+              "description": "Whether the issuer notifies the cardholder before or after an increase."
+            }
+          }
+        }
+      }
+    },
+
+    "disclosure_and_transparency": {
+      "type": "object",
+      "description": "Measures of disclosure quality. Informs Section 7 analysis.",
+      "properties": {
+        "agreement_url": {
+          "type": ["string", "null"],
+          "format": "uri",
+          "description": "URL to the current cardholder agreement."
+        },
+        "agreement_page_count": {
+          "type": ["integer", "null"],
+          "description": "Page count of the cardholder agreement."
+        },
+        "agreement_word_count": {
+          "type": ["integer", "null"],
+          "description": "Word count of the cardholder agreement."
+        },
+        "flesch_kincaid_grade_level": {
+          "type": ["number", "null"],
+          "description": "Flesch-Kincaid grade level of the cardholder agreement text."
+        },
+        "schumer_box_url": {
+          "type": ["string", "null"],
+          "format": "uri",
+          "description": "Direct URL to the Schumer Box / pricing summary."
+        },
+        "cfpb_agreement_id": {
+          "type": ["string", "null"],
+          "description": "CFPB Credit Card Agreement Database identifier, if available."
+        }
+      }
+    },
+
+    "ecosystem": {
+      "type": "object",
+      "description": "Ecosystem-level attributes. Informs Section 8 and 9 analysis.",
+      "properties": {
+        "interchange_category": {
+          "type": ["string", "null"],
+          "enum": ["standard", "premium", "super_premium", "commercial", "regulated", "unknown", null],
+          "description": "Interchange fee tier classification."
+        },
+        "data_sharing_policy": {
+          "type": "object",
+          "description": "How the issuer uses and shares cardholder transaction data.",
+          "properties": {
+            "shares_with_affiliates": { "type": "boolean" },
+            "shares_with_third_parties": { "type": "boolean" },
+            "opt_out_available": { "type": "boolean" },
+            "targeted_marketing_from_transaction_data": { "type": "boolean" }
+          }
+        },
+        "bnpl_integration": {
+          "type": "object",
+          "description": "Whether the card offers embedded buy-now-pay-later installment features.",
+          "properties": {
+            "offered": { "type": "boolean" },
+            "product_name": {
+              "type": ["string", "null"],
+              "description": "Branded name (e.g., 'My Chase Plan', 'Amex Plan It')."
+            },
+            "fee_type": {
+              "type": ["string", "null"],
+              "enum": ["flat_monthly_fee", "apr_based", "no_fee", null],
+              "description": "How the installment plan is priced."
+            }
+          }
+        },
+        "product_switching": {
+          "type": "object",
+          "description": "Product change / downgrade policies.",
+          "properties": {
+            "product_change_available": {
+              "type": "boolean",
+              "description": "Whether the cardholder can change to a different card product without closing the account."
+            },
+            "downgrade_to_no_annual_fee_available": {
+              "type": "boolean",
+              "description": "Whether a no-annual-fee downgrade option exists."
+            },
+            "rewards_forfeited_on_product_change": {
+              "type": "boolean",
+              "description": "Whether accumulated rewards are lost when switching products."
+            }
+          }
+        }
+      }
+    },
+
+    "military_and_regulatory": {
+      "type": "object",
+      "description": "Regulatory protections and special programs.",
+      "properties": {
+        "scra_mla_benefits": {
+          "type": "object",
+          "description": "Servicemembers Civil Relief Act / Military Lending Act benefits.",
+          "properties": {
+            "apr_cap_percent": {
+              "type": ["number", "null"],
+              "description": "APR cap for eligible servicemembers (typically 6% under SCRA)."
+            },
+            "fee_waivers": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Fees waived for eligible servicemembers."
+            }
+          }
+        },
+        "hardship_program_available": {
+          "type": "boolean",
+          "description": "Whether the issuer offers a financial hardship program with modified terms."
+        }
+      }
+    }
+  },
+
+  "$defs": {
+    "apr_range": {
+      "type": "object",
+      "description": "An APR that may be expressed as a single rate or a range.",
+      "properties": {
+        "min_percent": {
+          "type": "number",
+          "description": "Low end of the APR range."
+        },
+        "max_percent": {
+          "type": "number",
+          "description": "High end of the APR range (same as min if a single rate)."
+        },
+        "variable": {
+          "type": "boolean",
+          "description": "Whether this rate varies with an index (typically the prime rate)."
+        }
+      }
+    },
+    "promotional_apr": {
+      "type": ["object", "null"],
+      "description": "A time-limited promotional APR.",
+      "properties": {
+        "rate_percent": {
+          "type": "number",
+          "description": "Promotional APR (0 for a 0% offer)."
+        },
+        "duration_months": {
+          "type": "integer",
+          "description": "Length of the promotional period in months."
+        },
+        "reverts_to": {
+          "type": "string",
+          "description": "What the rate reverts to after the promotional period (e.g., 'standard_purchase_apr')."
+        },
+        "early_termination_triggers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Events that can end the promo early (e.g., 'late_payment', 'returned_payment')."
+        }
+      }
+    }
+  }
+}
