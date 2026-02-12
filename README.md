@@ -1,18 +1,18 @@
-![Fair Finance Foundation Banner](banner.png)
+![Open Credit Cards Banner](banner.png)
 
-# Fair Finance Foundation
+# Open Credit Cards
 
 ### A Comprehensive, Public Credit Card Dataset
 
-This repository is dedicated to building and maintaining a comprehensive, open-source dataset of credit card information. Our mission is to provide transparent and accessible data for consumers, researchers, and developers to promote a fairer and more understandable financial ecosystem.
+A comprehensive, open-source dataset of credit card information. Our mission is to create a fairer and more understandable financial ecosystem.
 
-The dataset includes information on interest rates, fees, rewards programs, and the fine print from credit card agreements. All data is collected from publicly available sources.
+This dataset includes information on interest rates, fees, rewards programs, and the fine print from credit card agreements. All data is collected from publicly available sources.
 
 ### View the Data
 
 All of our data and documentation is available on our GitHub Pages site:
 
-**[Explore the Fair Finance Dataset](https://<OWNER>.github.io/<REPO>/)**
+**[Explore the Docs](https://fair-finance-foundation.github.io/open-credit-cards/)**
 
 ### Contributing
 
