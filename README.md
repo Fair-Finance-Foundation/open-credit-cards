@@ -2,8 +2,6 @@
 
 # Open Credit Cards
 
-### A Comprehensive, Public Credit Card Dataset
-
 A comprehensive, open-source dataset of credit card information. Our mission is to create a fairer and more understandable financial ecosystem.
 
 This dataset includes information on interest rates, fees, rewards programs, and the fine print from credit card agreements. All data is collected from publicly available sources.
