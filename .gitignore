@@ -1,2 +1,5 @@
 node_modules/
 .DS_Store
+.turbo/
+dist/
+packages/mcp-server/src/generated-data.ts

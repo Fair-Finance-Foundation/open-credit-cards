@@ -1,5 +1,12 @@
 {
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "@mariozechner/pi-coding-agent": "^0.52.5"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.0"
   }
 }

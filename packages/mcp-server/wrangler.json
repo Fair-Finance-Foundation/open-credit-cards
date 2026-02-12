@@ -1,0 +1,5 @@
+{
+  "name": "open-credit-cards-mcp",
+  "main": "dist/index.js",
+  "compatibility_date": "2025-04-01"
+}
