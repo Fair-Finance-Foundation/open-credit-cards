@@ -62,3 +62,7 @@ This project uses the `/docs` directory to store all relevant documentation and
 data for the "Fair Finance Foundation" credit card dataset. To ensure the agent
 has full context, all markdown files within the `/docs` directory should be
 recursively loaded.
+
+## Agent Instructions
+
+**Do not** delete `package.json` or `package-lock.json` files.
