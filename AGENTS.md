@@ -66,3 +66,7 @@ recursively loaded.
 ## Agent Instructions
 
 **Do not** delete `package.json` or `package-lock.json` files.
+
+**Do not** commit to `.github/workflows`, since you do not have permission to do
+so. Post workflows as issue comments instead, and tag a human, asking them to
+commit the workflow on your behalf.
