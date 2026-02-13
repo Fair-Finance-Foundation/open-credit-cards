@@ -1,5 +1,6 @@
 {
-  "name": "open-credit-cards-mcp",
+  "name": "mcp",
   "main": "dist/index.js",
-  "compatibility_date": "2025-04-01"
+  "compatibility_date": "2025-04-01",
+  "account_id": "50c4ae21c5d16f055227bc59fdf79e20"
 }
