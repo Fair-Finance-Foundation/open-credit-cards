@@ -1,4 +1,4 @@
-name: MCP Server CI
+name: MCP Server CI/CD
 
 on:
   push:
@@ -12,20 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-
-      - name: Install dependencies
-        run: bun install
-
+      - run: bun install
       - name: Embed data
         run: cd packages/mcp-server && bun run embed-data
-
       - name: Build
         run: cd packages/mcp-server && bun build src/index.ts --outdir dist --target browser --minify
-
       - name: Report bundle size
         run: |
           SIZE=$(stat -c%s packages/mcp-server/dist/index.js)
@@ -34,8 +28,19 @@ jobs:
           echo "- Raw: $(numfmt --to=iec $SIZE)" >> $GITHUB_STEP_SUMMARY
           echo "- Gzipped: $(numfmt --to=iec $GZIP)" >> $GITHUB_STEP_SUMMARY
 
-  deploy:
+  test:
     needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install
+      - run: bunx turbo test --filter=@open-credit-cards/mcp-server
+
+  deploy:
+    needs: test
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
