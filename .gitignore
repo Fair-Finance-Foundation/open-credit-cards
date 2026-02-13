@@ -3,3 +3,4 @@ node_modules/
 .turbo/
 dist/
 packages/mcp-server/src/generated-data.ts
+.wrangler/
