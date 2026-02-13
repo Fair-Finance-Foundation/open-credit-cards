@@ -5,6 +5,7 @@
   "scripts": {
     "embed-data": "bun run scripts/embed-data.ts",
     "build": "bun run embed-data && bun build src/index.ts --outdir dist --target browser --minify",
+    "test": "bun run embed-data && bun test",
     "dev": "bun run embed-data && wrangler dev",
     "deploy": "bun run build && wrangler deploy"
   },
