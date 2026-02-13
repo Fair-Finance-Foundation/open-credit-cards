@@ -5,11 +5,13 @@ function req(path: string, options?: RequestInit): Request {
   return new Request(`http://localhost${path}`, options);
 }
 
+type JsonResponse = Record<string, unknown>;
+
 describe("Worker routing", () => {
   test("GET / returns health check", async () => {
     const res = await worker.fetch(req("/"));
     expect(res.status).toBe(200);
-    const body = await res.json();
+    const body = (await res.json()) as JsonResponse;
     expect(body.status).toBe("ok");
     expect(body.mcp_endpoint).toBe("/mcp");
   });
@@ -17,7 +19,7 @@ describe("Worker routing", () => {
   test("GET /health returns health check", async () => {
     const res = await worker.fetch(req("/health"));
     expect(res.status).toBe(200);
-    const body = await res.json();
+    const body = (await res.json()) as JsonResponse;
     expect(body.status).toBe("ok");
   });
 
@@ -47,9 +49,9 @@ describe("Worker routing", () => {
       })
     );
     expect(res.status).toBe(200);
-    const body = await res.json();
-    expect(body.result.serverInfo.name).toBe("Open Credit Cards");
-    expect(body.result.capabilities.tools).toBeDefined();
+    const body = (await res.json()) as JsonResponse;
+    expect(((body.result as JsonResponse)?.serverInfo as JsonResponse)?.name).toBe("Open Credit Cards");
+    expect(((body.result as JsonResponse)?.capabilities as JsonResponse)?.tools).toBeDefined();
   });
 
   test("POST /mcp lists tools", async () => {
@@ -69,8 +71,8 @@ describe("Worker routing", () => {
       })
     );
     expect(res.status).toBe(200);
-    const body = await res.json();
-    expect(body.result.tools).toHaveLength(5);
+    const body = (await res.json()) as JsonResponse;
+    expect((body.result as JsonResponse)?.tools).toHaveLength(4);
   });
 
   test("POST /mcp calls a tool", async () => {
@@ -93,8 +95,9 @@ describe("Worker routing", () => {
       })
     );
     expect(res.status).toBe(200);
-    const body = await res.json();
-    const cards = JSON.parse(body.result.content[0].text);
+    const body = (await res.json()) as JsonResponse;
+    const result = body.result as { content: Array<{ text: string }> };
+    const cards = JSON.parse(result.content[0].text);
     expect(cards).toHaveLength(5);
   });
 });

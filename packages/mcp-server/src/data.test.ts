@@ -24,7 +24,7 @@ describe("loadData", () => {
 
   test("each card has a valid card_identity", () => {
     for (const card of data.cards) {
-      const ci = card.raw.card_identity as Record<string, unknown>;
+      const ci = card.raw.card_identity;
       expect(ci).toBeDefined();
       expect(typeof ci.issuer_name).toBe("string");
       expect(typeof ci.card_name).toBe("string");
@@ -34,19 +34,6 @@ describe("loadData", () => {
   test("each card has schema_version 1.0.0", () => {
     for (const card of data.cards) {
       expect(card.raw.schema_version).toBe("1.0.0");
-    }
-  });
-
-  test("allFiles includes both schema and card files", () => {
-    expect(data.allFiles.length).toBeGreaterThanOrEqual(6); // 1 schema + 5 cards
-    const paths = data.allFiles.map((f) => f.path);
-    expect(paths).toContain("schemas/credit-card.schema.json");
-    expect(paths.some((p) => p.startsWith("sample-credit-cards/"))).toBe(true);
-  });
-
-  test("all embedded file content is valid JSON", () => {
-    for (const file of data.allFiles) {
-      expect(() => JSON.parse(file.content)).not.toThrow();
     }
   });
 });

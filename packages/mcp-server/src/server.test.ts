@@ -33,11 +33,10 @@ describe("MCP server", () => {
     expect(info?.version).toBe("0.1.0");
   });
 
-  test("lists all 5 tools", async () => {
+  test("lists all 4 tools", async () => {
     const { tools } = await client.listTools();
     const names = tools.map((t) => t.name).sort();
     expect(names).toEqual([
-      "get_all_data_files",
       "get_credit_card",
       "get_schema",
       "list_credit_cards",
@@ -234,33 +233,3 @@ describe("search_credit_cards", () => {
   });
 });
 
-describe("get_all_data_files", () => {
-  test("returns all data files with paths and parsed content", async () => {
-    const result = await client.callTool({
-      name: "get_all_data_files",
-      arguments: {},
-    });
-    const content = result.content as Array<{ type: string; text: string }>;
-    const files = JSON.parse(content[0].text);
-    expect(files.length).toBeGreaterThanOrEqual(6);
-    for (const file of files) {
-      expect(file).toHaveProperty("path");
-      expect(file).toHaveProperty("content");
-      expect(typeof file.content).toBe("object"); // parsed JSON, not string
-    }
-  });
-
-  test("includes the schema file", async () => {
-    const result = await client.callTool({
-      name: "get_all_data_files",
-      arguments: {},
-    });
-    const content = result.content as Array<{ type: string; text: string }>;
-    const files = JSON.parse(content[0].text);
-    const schemaFile = files.find(
-      (f: { path: string }) => f.path === "schemas/credit-card.schema.json"
-    );
-    expect(schemaFile).toBeDefined();
-    expect(schemaFile.content.title).toBe("Credit Card Product");
-  });
-});

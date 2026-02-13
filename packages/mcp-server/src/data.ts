@@ -1,36 +1,38 @@
 /**
- * Parses embedded data files into typed structures.
- * Thin wrapper — no transformation beyond parsing.
+ * Loads generated data into a typed store. Schema and cards come from
+ * generated-data.ts (types + sampleCreditCards).
  */
-import { embeddedFiles, type EmbeddedFile } from "./generated-data.js";
+import {
+  creditCardSchema,
+  sampleCreditCardPaths,
+  sampleCreditCards,
+  type CreditCard,
+} from "./generated-data.js";
 
-export interface CreditCard {
+export type { CreditCard };
+
+export interface CardEntry {
   id: string;
-  raw: Record<string, unknown>;
+  raw: CreditCard;
 }
 
 export interface DataStore {
-  schema: Record<string, unknown> | null;
-  cards: CreditCard[];
-  allFiles: EmbeddedFile[];
+  schema: typeof creditCardSchema;
+  cards: CardEntry[];
+}
+
+function pathToId(path: string): string {
+  return path.replace(/^sample-credit-cards\//, "").replace(/\.json$/, "");
 }
 
 export function loadData(): DataStore {
-  let schema: Record<string, unknown> | null = null;
-  const cards: CreditCard[] = [];
+  const cards: CardEntry[] = sampleCreditCards.map((raw, i) => ({
+    id: pathToId(sampleCreditCardPaths[i] ?? ""),
+    raw,
+  }));
 
-  for (const file of embeddedFiles) {
-    const parsed = JSON.parse(file.content);
-
-    if (file.path.startsWith("schemas/")) {
-      schema = parsed;
-    } else if (file.path.startsWith("sample-credit-cards/")) {
-      const id = file.path
-        .replace("sample-credit-cards/", "")
-        .replace(".json", "");
-      cards.push({ id, raw: parsed });
-    }
-  }
-
-  return { schema, cards, allFiles: embeddedFiles };
+  return {
+    schema: creditCardSchema,
+    cards,
+  };
 }
