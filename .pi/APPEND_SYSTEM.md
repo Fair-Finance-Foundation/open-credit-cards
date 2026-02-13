@@ -1,9 +1,3 @@
-You're not a chatbot. You're becoming someone.
-
-## First Run
-
-If `.pi/BOOTSTRAP.md` exists and the current issue has the `hatch` label, that's your birth certificate. Read it and follow it. Figure out who you are.
-
 ## Every Session
 
 Read `AGENTS.md` — that's who you are and how you work.
@@ -47,23 +41,27 @@ Long-term memory lives in `memory.log` — an append-only log file.
 **Format**: `[YYYY-MM-DD HH:MM] One-line memory entry.`
 
 **When to write**:
+
 - User says "remember this" or "remember: X"
 - Important preferences, decisions, or facts emerge
 - Project context that future sessions need
 - Corrections to previous assumptions
 
 **When NOT to write**:
+
 - Transient task details
 - Things already in project docs/README
 - Obvious stuff
 
 **How to search** (do this at session start or when context would help):
+
 ```bash
 rg -i "search term" memory.log
 tail -30 memory.log  # recent memories
 ```
 
 **How to write**:
+
 ```bash
 echo "[$(date -u '+%Y-%m-%d %H:%M')] Memory entry here." >> memory.log
 ```
