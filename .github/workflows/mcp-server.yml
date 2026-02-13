@@ -1,0 +1,49 @@
+name: MCP Server CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/mcp-server/**"
+      - "data/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Embed data
+        run: cd packages/mcp-server && bun run embed-data
+
+      - name: Build
+        run: cd packages/mcp-server && bun build src/index.ts --outdir dist --target browser --minify
+
+      - name: Report bundle size
+        run: |
+          SIZE=$(stat -c%s packages/mcp-server/dist/index.js)
+          GZIP=$(gzip -c packages/mcp-server/dist/index.js | wc -c)
+          echo "### Bundle size" >> $GITHUB_STEP_SUMMARY
+          echo "- Raw: $(numfmt --to=iec $SIZE)" >> $GITHUB_STEP_SUMMARY
+          echo "- Gzipped: $(numfmt --to=iec $GZIP)" >> $GITHUB_STEP_SUMMARY
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install
+      - run: cd packages/mcp-server && bun run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
